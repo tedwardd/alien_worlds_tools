@@ -2,6 +2,12 @@
 
 This repository is a collection of python tools I wrote for myself to improve my Alien Worlds game experience. I offer no warranty on the tools provided here. If you find a bug or have an improvement, you're welcome to submit a pull request. Suggestions are also welcomed, please open an issue. I make not promises to implement every suggestion but will consider anything you may find helpful.
 
+## Quickstart
+Run the bootstrap script to pull down the required libraries and install the python environment. You must have pyenv and pip installed prior to running bootstrap.
+```
+script/bootstrap
+```
+
 ## aw_reporter.py
 This is a tool I use during contests to check information about my mining rig or those of my team mates to determine if changes need to be made.
 
