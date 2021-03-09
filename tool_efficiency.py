@@ -35,8 +35,24 @@ def remove_n_smallest(lst, n):
     "--multiplier",
     required=False,
     type=float,
-    default=1.7,
-    show_default="1.7",
+    default=1,
+    show_default="1",
+)
+@click.option(
+    "-p",
+    "--power-multiplier",
+    required=False,
+    type=float,
+    default=1,
+    show_default="1",
+)
+@click.option(
+    "-l",
+    "--luck-multiplier",
+    required=False,
+    type=float,
+    default=1,
+    show_default="1",
 )
 @click.option(
     "--allow-duplicate",
@@ -68,6 +84,8 @@ def main(
     summary,
     tools,
     supply,
+    power_multiplier,
+    luck_multiplier,
 ):
 
     if rarities and tools:
@@ -118,9 +136,9 @@ def main(
             tlm.append(tools_obj.get(tool).get("tlm"))
             luck.append(tools_obj.get(tool).get("luck"))
         charge_times = remove_n_smallest(charge_times, 1)
-        tlm_total = sum(tlm) * multiplier
+        tlm_total = sum(tlm) * power_multiplier
         charge_total = sum(charge_times) * multiplier
-        luck_total = sum(luck)
+        luck_total = sum(luck) * luck_multiplier
         tlm_per_min = ((tlm_total / 100) * supply) / charge_total * 60
         luck_per_min = luck_total
         if not summary:
