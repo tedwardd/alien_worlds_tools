@@ -28,13 +28,15 @@ def remove_n_smallest(lst, n):
     required=False,
     type=str,
     default=None,
+    show_default="all",
 )
 @click.option(
     "-m",
     "--multiplier",
     required=False,
     type=float,
-    default=1.0,
+    default=1.7,
+    show_default="1.7",
 )
 @click.option(
     "--allow-duplicate",
@@ -116,23 +118,25 @@ def main(
             tlm.append(tools_obj.get(tool).get("tlm"))
             luck.append(tools_obj.get(tool).get("luck"))
         charge_times = remove_n_smallest(charge_times, 1)
-        tlm_total = sum(tlm)
+        tlm_total = sum(tlm) * multiplier
         charge_total = sum(charge_times) * multiplier
         luck_total = sum(luck)
-        tlm_per_min = tlm_total * multiplier
+        tlm_per_min = ((tlm_total / 100) * supply) / charge_total * 60
         luck_per_min = luck_total
         if not summary:
             click.secho(f"{bag}", bold=True)
-            click.echo(f"TLM/min: {tlm_per_min}")
+            click.echo(
+                f"TLM/min: {round(tlm_per_min, 3)} // {round((tlm_total/100) * supply, 3)}/attempt"
+            )
             click.echo(f"luck: {luck_total}")
-        tlm_scores.update({tlm_per_min: bag})
+            click.secho(f"------------------------", bold=True)
+        tlm_scores.update({round(tlm_per_min, 3): bag})
         luck_scores.update({luck_per_min: bag})
     top_tlm = max(list(tlm_scores))
     top_luck = max(list(luck_scores))
-    print(
-        f"{tlm_scores.get(top_tlm)}: {top_tlm}% || ~{top_tlm/100 * supply}/attempt || {(top_tlm/100 * supply)/charge_total * 60} TLM/min"
-    )
-    print(f"{luck_scores.get(top_luck)}: {top_luck} Luck")
+    click.secho("Best overall combo for average TLM/min", bold=True, fg="green")
+    click.secho(f"{tlm_scores.get(top_tlm)}: {top_tlm} TLM/min", fg="green")
+    click.secho(f"{luck_scores.get(top_luck)}: {top_luck} Luck", fg="green")
 
 
 if __name__ == "__main__":
